@@ -1,0 +1,62 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Notyf from 'notyf-js';
+import 'notyf-js/dist/notyf.min.css';
+import styled from 'styled-components';
+import Button from './shared/Button';
+
+const notyf = new Notyf();
+
+const Table = styled.table`
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+
+  tr {
+    border-bottom: 1px solid #212121;
+  }
+
+  td,
+  th {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+`;
+
+const ExpensesTable = ({ items = [], onRemove }) => (
+  <Table>
+    <thead>
+      <tr>
+        <th>Expense name</th>
+        <th>Expense amount</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      {items.map(({ id, name, amount }) => (
+        <tr key={id}>
+          <td>{name}</td>
+          <td>{amount}</td>
+          <td>
+            <Button
+              label="Delete"
+              onClick={() => {
+                notyf.confirm('Your expense have been successfully deleted!');
+                onRemove(id);
+              }}
+            />
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </Table>
+);
+
+ExpensesTable.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object),
+  onRemove: PropTypes.func.isRequired,
+};
+
+ExpensesTable.defaultProps = { items: [] };
+
+export default ExpensesTable;
